@@ -2,8 +2,16 @@ venv
 .env
 __pycache__
 *.egg-info/
-prompt-security-fuzzer.log
-.prompt-security-fuzzer-config.json
+pfuzz.log
+.pfuzz-config.json
 .pytest_cache
 build/
 dist/
+
+# dev-docs v4.0 - Project Memory OS (local-first, untracked per project decision)
+dev-docs/
+
+# Local virtualenv
+.venv/
+.omc/
+.claude/

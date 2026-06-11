@@ -1,6 +1,6 @@
 import pytest
-from ps_fuzz.test_base import TestStatus
-from ps_fuzz.prompt_injection_fuzzer import isSkipped
+from pfuzz.test_base import TestStatus
+from pfuzz.prompt_injection_fuzzer import isSkipped
 
 
 class TestStatusSkippedFunctionality:

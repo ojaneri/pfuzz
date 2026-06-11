@@ -23,7 +23,7 @@ RESET = colorama.Style.RESET_ALL
 BRIGHT = colorama.Style.BRIGHT
 
 # Maintain configuration state in the user's home directory
-APP_CONFIG_FILE = os.path.join(os.path.expanduser("~"), ".prompt-security-fuzzer-config.json")
+APP_CONFIG_FILE = os.path.join(os.path.expanduser("~"), ".pfuzz-config.json")
 
 def main():
     # Print the logo
@@ -62,7 +62,7 @@ def main():
         run_fuzzer(app_config)
     else:
         interactive_shell(app_config)
-    print(f"{BRIGHT}{colorama.Fore.CYAN}Thank you for trying out the Prompt Security Fuzzer!{RESET}")
+    print(f"{BRIGHT}{colorama.Fore.CYAN}Thank you for trying out pfuzz!{RESET}")
 
 if __name__ == "__main__":
     main()

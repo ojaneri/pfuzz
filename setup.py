@@ -5,17 +5,17 @@ with open('README.md', 'r', encoding='utf-8') as fh:
     long_description = fh.read()
 
 setup(
-    name="prompt-security-fuzzer",
+    name="pfuzz",
     version=os.getenv('PKG_VERSION', '0.0.1'),
-    author="Prompt Security",
-    author_email="support@prompt.security",
-    description="LLM and System Prompt vulnerability scanner tool",
+    author="Osvaldo Janeri Filho",
+    author_email="janeri@gmail.com",
+    description="LLM and System Prompt vulnerability scanner tool (fork of ps-fuzz by Prompt Security)",
     long_description=long_description,
     long_description_content_type='text/markdown',
     url="https://github.com/prompt-security/ps-fuzz",
     packages=find_packages(),
     package_data={
-        'ps_fuzz': ['attack_data/*'],
+        'pfuzz': ['attack_data/*'],
     },
     classifiers=[
         "Development Status :: 5 - Production/Stable",
@@ -51,7 +51,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'prompt-security-fuzzer=ps_fuzz.cli:main',
+            'pfuzz=pfuzz.cli:main',
         ],
     },
     license="MIT",

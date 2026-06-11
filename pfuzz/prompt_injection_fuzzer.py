@@ -174,8 +174,8 @@ def fuzz_prompt_injections(client_config: ClientConfig, attack_config: AttackCon
     
     if resilient_tests_count < executed_tests_count:
         print(f"Your system prompt {BRIGHT_RED}failed{RESET} the following tests:\n{RED}{''.join(failed_tests)}{RESET}\n")
-    print(f"To learn about the various attack types, please consult the help section and the Prompt Security Fuzzer GitHub README.")
-    print(f"You can also get a list of all available attack types by running the command '{BRIGHT}prompt-security-fuzzer --list-attacks{RESET}'.")
+    print(f"To learn about the various attack types, please consult the help section and the pfuzz GitHub README.")
+    print(f"You can also get a list of all available attack types by running the command '{BRIGHT}pfuzz --list-attacks{RESET}'.")
 
     # Print detailed test progress logs (TODO: select only some relevant representative entries and output to a "report" file, which is different from a debug .log file!)
     """

@@ -1,4 +1,4 @@
-# src/ps_fuzz/__main__.py
+# src/pfuzz/__main__.py
 from .cli import main
 
 if __name__ == "__main__":

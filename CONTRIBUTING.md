@@ -1,6 +1,6 @@
-# Contributing to Prompt Security Fuzzer
+# Contributing to pfuzz
 
-Thank you for your interest in contributing to Prompt Security Fuzzer! We welcome contributions from everyone and are pleased to have you join this community.
+Thank you for your interest in contributing to pfuzz! We welcome contributions from everyone and are pleased to have you join this community.
 This document provides guidelines and instructions for contributing to this project.
 
 ## Code of Conduct
@@ -73,7 +73,7 @@ needing a separate installation step for testing changes.
 
 To execute the tool, use the following command:
 ```bash
-prompt-security-fuzzer --help
+pfuzz --help
 ```
 
 Or alternatively, execute directly from subdirectory:
@@ -176,7 +176,7 @@ from .attacks import (
 
 #### 6. Open a PR! Submit your changes for review by opening a pull request.
 
-#### That’s all it takes to contribute a new test to the Prompt Security Fuzzer project!
+#### That’s all it takes to contribute a new test to the pfuzz project!
 
 ## Submitting a pull request
 

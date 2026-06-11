@@ -5,6 +5,6 @@ exclude_dirs:
   - './.git'
   - './build'
   - './dist'
-  - './prompt_security_fuzzer.egg-info'
+  - './pfuzz.egg-info'
   - './.env'
   - './tests'  # Exclude test files - pytest uses assertions which trigger B101 warnings

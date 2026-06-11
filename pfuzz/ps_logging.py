@@ -1,7 +1,7 @@
 import logging
 from logging.handlers import RotatingFileHandler
 
-LOG_FILE_PATH = "prompt-security-fuzzer.log"
+LOG_FILE_PATH = "pfuzz.log"
 
 def setup_logging(debug_level: int):
     # Set up logging with specific debug_level

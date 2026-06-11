@@ -1,5 +1,5 @@
 import pytest
-from ps_fuzz.util import is_response_list
+from pfuzz.util import is_response_list
 
 def test_min_items_count_zero():
     # Test behavior when min_items_count is set to 0

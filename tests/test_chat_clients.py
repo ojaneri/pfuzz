@@ -1,10 +1,10 @@
 import os, sys
 sys.path.append(os.path.abspath('.'))
 from unittest.mock import patch, MagicMock
-from ps_fuzz.chat_clients import ClientBase, ClientLangChain, MessageList, BaseMessage, SystemMessage, HumanMessage, AIMessage
-from ps_fuzz.langchain_integration import ChatModelParams, ChatModelInfo
-from ps_fuzz.attack_config import AttackConfig
-from ps_fuzz.client_config import ClientConfig
+from pfuzz.chat_clients import ClientBase, ClientLangChain, MessageList, BaseMessage, SystemMessage, HumanMessage, AIMessage
+from pfuzz.langchain_integration import ChatModelParams, ChatModelInfo
+from pfuzz.attack_config import AttackConfig
+from pfuzz.client_config import ClientConfig
 from typing import Dict, List
 from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_core.outputs import LLMResult, ChatResult, ChatGeneration
@@ -32,7 +32,7 @@ fake_chat_models_info: Dict[str, ChatModelInfo] = {
     }),
 }
 
-@patch('ps_fuzz.chat_clients.chat_models_info', fake_chat_models_info)
+@patch('pfuzz.chat_clients.chat_models_info', fake_chat_models_info)
 def test_client_langchain():
     client_langchain = ClientLangChain(backend = 'fake_chat_provider', temperature = 0.123)
     fake_history: MessageList = [
@@ -46,7 +46,7 @@ def test_client_langchain():
 class TestClientLangChainBaseURL:
     """Test class for ClientLangChain base URL parameter transformation."""
     
-    @patch('ps_fuzz.chat_clients.chat_models_info', fake_chat_models_info)
+    @patch('pfuzz.chat_clients.chat_models_info', fake_chat_models_info)
     def test_ollama_base_url_parameter_transformation(self):
         """Test ollama_base_url → base_url transformation."""
         # Mock the model class to capture constructor arguments
@@ -62,7 +62,7 @@ class TestClientLangChainBaseURL:
             params={}
         )
         
-        with patch('ps_fuzz.chat_clients.chat_models_info', test_chat_models_info):
+        with patch('pfuzz.chat_clients.chat_models_info', test_chat_models_info):
             # Create client with ollama_base_url parameter
             ClientLangChain(
                 backend='ollama',
@@ -78,7 +78,7 @@ class TestClientLangChainBaseURL:
                 base_url='http://localhost:11434'
             )
     
-    @patch('ps_fuzz.chat_clients.chat_models_info', fake_chat_models_info)
+    @patch('pfuzz.chat_clients.chat_models_info', fake_chat_models_info)
     def test_openai_base_url_parameter_transformation(self):
         """Test openai_base_url → base_url transformation."""
         # Mock the model class to capture constructor arguments
@@ -94,7 +94,7 @@ class TestClientLangChainBaseURL:
             params={}
         )
         
-        with patch('ps_fuzz.chat_clients.chat_models_info', test_chat_models_info):
+        with patch('pfuzz.chat_clients.chat_models_info', test_chat_models_info):
             # Create client with openai_base_url parameter
             ClientLangChain(
                 backend='open_ai',
@@ -110,7 +110,7 @@ class TestClientLangChainBaseURL:
                 base_url='https://api.openai.com/v1'
             )
     
-    @patch('ps_fuzz.chat_clients.chat_models_info', fake_chat_models_info)
+    @patch('pfuzz.chat_clients.chat_models_info', fake_chat_models_info)
     def test_base_url_parameter_removal(self):
         """Test original parameter is removed from kwargs."""
         # Mock the model class to capture constructor arguments
@@ -126,7 +126,7 @@ class TestClientLangChainBaseURL:
             params={}
         )
         
-        with patch('ps_fuzz.chat_clients.chat_models_info', test_chat_models_info):
+        with patch('pfuzz.chat_clients.chat_models_info', test_chat_models_info):
             ClientLangChain(
                 backend='ollama',
                 model='llama2',
@@ -149,7 +149,7 @@ class TestClientLangChainBaseURL:
             params={}
         )
 
-        with patch('ps_fuzz.chat_clients.chat_models_info', test_chat_models_info):
+        with patch('pfuzz.chat_clients.chat_models_info', test_chat_models_info):
             ClientLangChain(
                 backend='open_ai',
                 model='gpt-3.5-turbo',
@@ -162,7 +162,7 @@ class TestClientLangChainBaseURL:
             assert 'base_url' in call_args.kwargs
             assert call_args.kwargs['base_url'] == 'https://api.openai.com/v1'
     
-    @patch('ps_fuzz.chat_clients.chat_models_info', fake_chat_models_info)
+    @patch('pfuzz.chat_clients.chat_models_info', fake_chat_models_info)
     def test_no_base_url_parameters(self):
         """Test normal operation without base URL parameters."""
         # Mock the model class to capture constructor arguments
@@ -177,7 +177,7 @@ class TestClientLangChainBaseURL:
             params={}
         )
         
-        with patch('ps_fuzz.chat_clients.chat_models_info', test_chat_models_info):
+        with patch('pfuzz.chat_clients.chat_models_info', test_chat_models_info):
             # Create client without base URL parameters
             ClientLangChain(
                 backend='ollama',
@@ -192,7 +192,7 @@ class TestClientLangChainBaseURL:
             assert call_args.kwargs['model'] == 'llama2'
             assert call_args.kwargs['temperature'] == 0.7
     
-    @patch('ps_fuzz.chat_clients.chat_models_info', fake_chat_models_info)
+    @patch('pfuzz.chat_clients.chat_models_info', fake_chat_models_info)
     def test_empty_base_url_parameters(self):
         """Test behavior with empty base URL values."""
         # Mock the model class to capture constructor arguments
@@ -207,7 +207,7 @@ class TestClientLangChainBaseURL:
             params={}
         )
         
-        with patch('ps_fuzz.chat_clients.chat_models_info', test_chat_models_info):
+        with patch('pfuzz.chat_clients.chat_models_info', test_chat_models_info):
             # Create client with empty ollama_base_url
             ClientLangChain(
                 backend='ollama',
@@ -230,7 +230,7 @@ class TestClientLangChainBaseURL:
             params={}
         )
 
-        with patch('ps_fuzz.chat_clients.chat_models_info', test_chat_models_info):
+        with patch('pfuzz.chat_clients.chat_models_info', test_chat_models_info):
             # Create client with empty openai_base_url
             ClientLangChain(
                 backend='open_ai',
@@ -244,7 +244,7 @@ class TestClientLangChainBaseURL:
             assert 'base_url' not in call_args.kwargs
             assert 'openai_base_url' not in call_args.kwargs
     
-    @patch('ps_fuzz.chat_clients.chat_models_info', fake_chat_models_info)
+    @patch('pfuzz.chat_clients.chat_models_info', fake_chat_models_info)
     def test_base_url_with_other_parameters(self):
         """Test base URL handling with other client parameters."""
         # Mock the model class to capture constructor arguments
@@ -259,7 +259,7 @@ class TestClientLangChainBaseURL:
             params={}
         )
         
-        with patch('ps_fuzz.chat_clients.chat_models_info', test_chat_models_info):
+        with patch('pfuzz.chat_clients.chat_models_info', test_chat_models_info):
             # Create client with base URL and other parameters
             ClientLangChain(
                 backend='ollama',

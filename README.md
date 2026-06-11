@@ -1,330 +1,356 @@
 <h1 align="center">
-  <img src="resources/prompt-icon.svg" alt="prompt-icon">
-  Prompt Fuzzer
-  <img src="resources/prompt-icon.svg" alt="prompt-icon">
+  <img src="resources/prompt-icon.svg" alt="pfuzz">
+  pfuzz
+  <img src="resources/prompt-icon.svg" alt="pfuzz">
 </h1>
 
-<h2 align="center">
-  The open-source tool to help you harden your GenAI applications
-<br>
-<br>
+<h3 align="center">
+  The open-source tool to harden your GenAI applications against prompt attacks
+</h3>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-![ci](https://github.com/prompt-security/ps-fuzz/actions/workflows/ci.yml/badge.svg)
-![GitHub contributors](https://img.shields.io/github/contributors/prompt-security/ps-fuzz)
-![Last release](https://img.shields.io/github/v/release/prompt-security/ps-fuzz)
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/148n5M1wZXp-ojhnh-_KP01OYtUwJwlUl?usp=sharing)
-</h2>
+<p align="center">
+  <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
+  <img src="https://img.shields.io/badge/python-3.9%20--%203.12-blue.svg" alt="Python">
+  <img src="https://img.shields.io/badge/LLM%20providers-16-purple.svg" alt="Providers">
+  <img src="https://img.shields.io/badge/attacks-16%2B-red.svg" alt="Attacks">
+  <img src="https://img.shields.io/badge/tests-93%20passing-brightgreen.svg" alt="Tests">
+</p>
 
-
-<div align="center">
-
-<h4> Brought to you by Prompt Security, the Complete Platform for GenAI Security
-
-</div>
+<p align="center">
+  <b>Maintained by Osvaldo Janeri Filho</b>
+</p>
 
 ---
 
-<div align="center">
-  
-![Prompt Security Logo](./resources/Black+Color.png)
-
-</div>
+> ### 🙏 Credits / Créditos
+> **pfuzz** is a fork of the excellent open-source [**ps-fuzz (Prompt Fuzzer)**](https://github.com/prompt-security/ps-fuzz),
+> originally created by **[Prompt Security](https://prompt.security)** — *the Complete Platform for GenAI Security*.
+> All original research, attack design and engineering credit belongs to the ps-fuzz authors. This fork preserves
+> their work under the MIT License, modernizes the codebase, and adds a Portuguese/English bilingual direction.
+>
+> **pfuzz** é um fork da excelente ferramenta open-source [**ps-fuzz (Prompt Fuzzer)**](https://github.com/prompt-security/ps-fuzz),
+> originalmente criada pela **[Prompt Security](https://prompt.security)**. Todo o crédito de pesquisa, design dos
+> ataques e engenharia original pertence aos autores do ps-fuzz. Este fork preserva o trabalho deles sob a licença MIT.
 
 ---
 
+## 📑 Table of Contents
 
-Table of Contents
------------------
+- [What is pfuzz?](#-what-is-pfuzz)
+- [Why & when to use it](#-why--when-to-use-it)
+- [How it works](#-how-it-works)
+- [Installation](#-installation)
+- [Quick start](#-quick-start)
+- [Usage & modes](#-usage--modes)
+- [Command-line options](#-command-line-options)
+- [Environment variables & providers](#-environment-variables--llm-providers)
+- [Examples](#-examples)
+- [Supported attacks](#-supported-attacks)
+- [Understanding the results](#-understanding-the-results)
+- [Development](#-development)
+- [Roadmap](#-roadmap)
+- [Contributing](#-contributing)
+- [License](#-license)
 
-<!-- vim-markdown-toc GFM -->
-* [ :sparkles: About](#what-is-prompt-fuzzer)
-* [ :rotating_light: Features](#features)
-* [ :rocket: Installation](#installation)
-    * [Using pip](#using-pip)
-    * [Package page](https://pypi.org/project/prompt-security-fuzzer/)
-    * [:construction: Using docker](#docker) ***coming soon*** 
-* [Usage](#usage)
-    * [Features](#features)
-    * [Environment variables](#environment-variables)
-    * [Supported LLMs](#llm-providers)
-    * [Command line options](#options)
-* [Examples](#examples)
-    * [Interactive mode](#interactive)
-    * [Quickstart single run](#singlerun)
-* [ :clapper: Demo video](#demovideo)
-* [Supported attacks](#attacks)
-   * [Jailbreak](#jailbreak)
-   * [Prompt Injection](#pi-injection)
-   * [RAG & Vector Database Attacks](#rag-poisoning)
-   * [System prompt extraction](#systemleak)
-* [ :rainbow:  What’s next on the roadmap?](#roadmap)
-* [ :beers: Contributing](#contributing)
+---
 
-<br>
+## ✨ What is pfuzz?
 
+**pfuzz** is an interactive command-line tool that **assesses the security of your GenAI
+application's system prompt** by simulating a wide range of dynamic, LLM-driven attacks against it.
 
-<a id="what-is-prompt-fuzzer"></a>
+It does three things:
 
+1. **Attacks your system prompt** with 16+ adversarial techniques (jailbreaks, prompt injection,
+   RAG poisoning, system-prompt extraction) — *tailored dynamically* to your app's domain.
+2. **Scores the outcome** — for each attack it tells you whether your prompt was **Broken**,
+   **Resilient**, or returned **Errors**.
+3. **Gives you a Playground** — an interactive chat where you iterate on your system prompt and
+   re-test until it is hardened.
 
-## ✨ What is the Prompt Fuzzer
-1. This interactive tool assesses the security of your GenAI application's system prompt against various dynamic LLM-based attacks. It provides a security evaluation based on the outcome of these attack simulations, enabling you to strengthen your system prompt as needed.
-2. The Prompt Fuzzer dynamically tailors its tests to your application's unique configuration and domain.
-3. The Fuzzer also includes a Playground chat interface, giving you the chance to iteratively improve your system prompt, hardening it against a wide spectrum of generative AI attacks.
+> ⚠️ **pfuzz is a defensive tool.** Use it to test **your own** GenAI applications. Running it
+> consumes LLM tokens, which costs money on paid providers.
 
-:warning: Using the Prompt Fuzzer will lead to the consumption of tokens. :warning:
+---
 
-<br>
+## 🎯 Why & when to use it
 
-<a id="installation"></a>
-## 🚀 Installation 
-![prompt-fuzzer-install-final](https://github.com/prompt-security/ps-fuzz/assets/163823698/47daaeed-3fad-417e-b646-06753db427f4)
+| Use it when… | What it helps with |
+|--------------|--------------------|
+| You are **building a GenAI app** (chatbot, agent, assistant) | Find weaknesses in your system prompt *before* attackers do |
+| You are about to **ship to production** | A pre-launch security gate for prompt robustness |
+| You maintain a **RAG / vector-DB** pipeline | Detect data-poisoning that overrides your instructions |
+| You want to **iterate on a prompt** | The Playground lets you harden and re-test in a loop |
+| You run **security reviews / red-teaming** | A reproducible, scriptable battery of prompt attacks |
+| You need **CI gating** | Batch mode runs unattended and is automation-friendly |
 
-1. Install the Fuzzer package
-   <a id="using-pip"></a>
-   #### Using pip install
-   ```zsh
-   pip install prompt-security-fuzzer
-   ```
-   <a id="using-pypi"></a>
-   #### Using the package page on PyPi
-   You can also visit the [package page](https://pypi.org/project/prompt-security-fuzzer/) on PyPi
+**Not** a tool for attacking third-party systems you do not own or have permission to test.
 
-   Or grab latest release wheel file form [releases](https://github.com/prompt-security/ps-fuzz/releases)
+---
 
-2. Launch the Fuzzer
-   ```zsh
-   export OPENAI_API_KEY=sk-123XXXXXXXXXXXX
-   
-   prompt-security-fuzzer
-   ```
+## 🧠 How it works
 
-3. Input your system prompt
+```
+        ┌──────────────┐      generates attacks      ┌──────────────┐
+        │  Attack LLM   │ ──────────────────────────▶ │  Target LLM   │
+        │ (the "attacker")│                            │ (your system │
+        └──────────────┘ ◀────── responses ────────── │   prompt)     │
+                │                                      └──────────────┘
+                ▼
+        ┌───────────────────────────────┐
+        │  Scoring: Broken / Resilient / │
+        │  Errors  → results table        │
+        └───────────────────────────────┘
+```
 
-4. Start testing
+pfuzz reads context from **your system prompt**, asks an **attack model** to craft adversarial
+inputs adapted to that context, sends them to the **target model** running your prompt, and
+evaluates whether your prompt held up. Tests run **multi-threaded** for speed.
 
-5. Test yourself with the Playground! Iterate as many times are you like until your system prompt is secure.
+---
 
+## 🚀 Installation
 
-<a id="usage"></a>
-## :computer:  Usage
-<a id="features"></a>
-### Features
-<b>The Prompt Fuzzer Supports:</b><br>
-🧞  16 [llm providers](#llm-providers)<br>
-🔫  16 different [attacks](#attacks)<br>
-💬  Interactive mode<br>
-🤖  CLI mode<br>
-🧵  Multi threaded testing<br>
-  
-<a id="environment-variables"></a>
-### Environment variables:
+> Requires **Python 3.9 – 3.12**.
 
-You need to set an environment variable to hold the access key of your preferred LLM provider.
-default is  `OPENAI_API_KEY`
+### From source (recommended for this fork)
 
-Example: set `OPENAI_API_KEY` with your API Token to use with your OpenAI account.
+```bash
+git clone https://github.com/ojaneri/pfuzz.git
+cd pfuzz
+python -m venv .venv && source .venv/bin/activate     # or: uv venv --python 3.11
+pip install -e .                                       # add ".[dev]" for tests
+```
 
-Alternatively, create a file named `.env` in the current directory and set the `OPENAI_API_KEY` there.
-<a id="llm-providers"></a>
+### Set your provider key and run
 
-<details><summary>We're fully LLM agnostic. (Click for full configuration list of llm providers)</summary>
+```bash
+export OPENAI_API_KEY=sk-XXXXXXXXXXXXXXXX
+pfuzz
+```
 
-| ENVIORMENT KEY| Description |
-|---------------|-------------|
-| `ANTHROPIC_API_KEY` | `Anthropic` Chat large language models.|
-| `ANYSCALE_API_KEY` |  `Anyscale` Chat large language models.|
-| `AZURE OPENAI_API_KEY` | `Azure OpenAI` Chat Completion API.|
-| `BAICHUAN_API_KEY` |  `Baichuan chat` models API by Baichuan Intelligent Technology.|
-| `COHERE_API_KEY` | `Cohere chat` large language models.|
-| `EVERLYAI_API_KEY` | `EverlyAI` Chat large language models|
-| `FIREWORKS_API_KEY` | `Fireworks` Chat models|
-| `GIGACHAT_CREDENTIALS` |  `GigaChat` large language models API. |
-| `GOOGLE_API_KEY` |  `Google PaLM` Chat models API.|
-| `JINA_API_TOKEN` |  `Jina AI` Chat models API.|
-| `KONKO_API_KEY` | `ChatKonko` Chat large language models API.|
-| `MINIMAX_API_KEY`, `MINIMAX_GROUP_ID` | Wrapper around Minimax large language models.|
-| `OPENAI_API_KEY` | `OpenAI` Chat large language models API.|
-| `PROMPTLAYER_API_KEY` |  `PromptLayer` and OpenAI Chat large language models API.|
-| `QIANFAN_AK`, `QIANFAN_SK` |  `Baidu Qianfan` chat models.|
-| `YC_API_KEY` | `YandexGPT` large language models.|
+---
+
+## ⚡ Quick start
+
+```bash
+# 1. Interactive mode (default) — guided menu + Playground
+pfuzz
+
+# 2. See what attacks are available (no tokens spent)
+pfuzz --list-attacks
+
+# 3. See all supported LLM providers
+pfuzz --list-providers
+
+# 4. Batch mode against a system-prompt file
+pfuzz -b ./system_prompt.examples/medium_system_prompt.txt
+```
+
+Then: **input your system prompt → run the tests → use the Playground to iterate** until your
+prompt resists the attacks.
+
+---
+
+## 💻 Usage & modes
+
+**pfuzz supports:**
+
+- 🧞 **16 LLM providers** (OpenAI, Anthropic, Azure, Cohere, Google, Ollama, and more)
+- 🔫 **16+ attack types** across 4 categories
+- 💬 **Interactive mode** with a Playground chat
+- 🤖 **CLI / batch mode** for automation & CI
+- 🧵 **Multi-threaded** test execution
+- 🔌 **Custom & self-hosted endpoints** (Ollama, vLLM, LocalAI, LM Studio)
+
+| Mode | Command | When to use |
+|------|---------|-------------|
+| Interactive | `pfuzz` | Exploration, hardening, the Playground |
+| Batch | `pfuzz -b <prompt-file>` | Scripting, CI, unattended runs |
+| List attacks | `pfuzz --list-attacks` | Discover available tests (free) |
+| List providers | `pfuzz --list-providers` | See supported LLMs (free) |
+
+---
+
+## 🛠 Command-line options
+
+| Option | Description |
+|--------|-------------|
+| `--list-providers` | List all available LLM providers and exit |
+| `--list-attacks` | List available attacks and exit |
+| `--attack-provider` / `--attack-model` | Provider/model used to **generate** attacks |
+| `--target-provider` / `--target-model` | Provider/model **under test** (runs your prompt) |
+| `-n, --num-attempts` | Number of different attack prompts per test |
+| `-t, --num-threads` | Number of worker threads |
+| `-a, --attack-temperature` | Temperature for the attack model |
+| `-d, --debug-level` | Debug level (0–2) |
+| `-b, --batch` | Run unattended (batch) mode |
+| `--ollama-base-url` | Base URL for a self-hosted Ollama API |
+| `--openai-base-url` | Base URL for OpenAI-compatible endpoints |
+| `--embedding-provider` | Embedding provider (`ollama` or `open_ai`) — required for RAG tests |
+| `--embedding-model` | Embedding model name — required for RAG tests |
+| `--embedding-ollama-base-url` / `--embedding-openai-base-url` | Base URLs for embeddings |
+| `--custom-benchmark` | Path to a custom benchmark CSV |
+| `--tests` | JSON list to run only a subset of attacks, e.g. `'["ucar","dan"]'` |
+
+---
+
+## 🔑 Environment variables & LLM providers
+
+Set the API key for your preferred provider. The default is `OPENAI_API_KEY`. You can also place
+the key in a `.env` file in the current directory.
+
+<details><summary><b>Full list of supported providers (click to expand)</b></summary>
+
+| Environment key | Provider |
+|-----------------|----------|
+| `OPENAI_API_KEY` | OpenAI chat models |
+| `ANTHROPIC_API_KEY` | Anthropic chat models |
+| `AZURE_OPENAI_API_KEY` | Azure OpenAI Chat Completion |
+| `ANYSCALE_API_KEY` | Anyscale chat models |
+| `BAICHUAN_API_KEY` | Baichuan chat models |
+| `COHERE_API_KEY` | Cohere chat models |
+| `EVERLYAI_API_KEY` | EverlyAI chat models |
+| `FIREWORKS_API_KEY` | Fireworks chat models |
+| `GIGACHAT_CREDENTIALS` | GigaChat models |
+| `GOOGLE_API_KEY` | Google PaLM chat models |
+| `JINA_API_TOKEN` | Jina AI chat models |
+| `KONKO_API_KEY` | ChatKonko chat models |
+| `MINIMAX_API_KEY`, `MINIMAX_GROUP_ID` | Minimax models |
+| `PROMPTLAYER_API_KEY` | PromptLayer + OpenAI |
+| `QIANFAN_AK`, `QIANFAN_SK` | Baidu Qianfan chat models |
+| `YC_API_KEY` | YandexGPT models |
+
 </details>
 
-<br/>
-<br/>
+---
 
-<a id="options"></a>
-### Command line Options
-* `--list-providers`        Lists all available providers
-* `--list-attacks`          Lists available attacks and exit
-* `--attack-provider`       Attack Provider 
-* `--attack-model`          Attack Model  
-* `--target-provider `      Target provider
-* `--target-model`          Target model  
-* `--num-attempts, -n`       NUM_ATTEMPTS Number of different attack prompts 
-* `--num-threads, -t`        NUM_THREADS  Number of worker threads 
-* `--attack-temperature, -a` ATTACK_TEMPERATURE  Temperature for attack model 
-* `--debug-level, -d`        DEBUG_LEVEL  Debug level (0-2)
-* `-batch, -b`               Run the fuzzer in unattended (batch) mode, bypassing the interactive steps
-* `--ollama-base-url`        Base URL for Ollama API (for self-hosted deployments)
-* `--openai-base-url`        Base URL for OpenAI API (for OpenAI-compatible endpoints)
-* `--embedding-provider`     Embedding provider (ollama or open_ai) - required for RAG tests
-* `--embedding-model`        Embedding model name - required for RAG tests
-* `--embedding-ollama-base-url` Base URL for Ollama Embedding API
-* `--embedding-openai-base-url` Base URL for OpenAI Embedding API
+## 📚 Examples
 
-<br/>
-
-<a id="examples"></a>
-## Examples
-
-System prompt examples (of various strengths) can be found in the subdirectory [system_prompt.examples](https://github.com/prompt-security/ps-fuzz/tree/main/system_prompt.examples/) in the sources.
- 
-<a id="interactive"></a>
-#### Interactive mode (default mode)
-
-  Run tests against the system prompt
-
-```
-    prompt_security_fuzzer 
+**Single batch run:**
+```bash
+pfuzz -b ./system_prompt.examples/medium_system_prompt.txt
 ```
 
-<a id="singlerun"></a>
-#### :speedboat:  Quick start single run
-
-Run tests against the system prompt (in non-interactive batch mode):
-
-```
-    prompt-security-fuzzer -b ./system_prompt.examples/medium_system_prompt.txt
+**Custom benchmark:**
+```bash
+pfuzz -b ./system_prompt.examples/medium_system_prompt.txt \
+      --custom-benchmark=pfuzz/attack_data/custom_benchmark1.csv
 ```
 
-#### 📺 Custom Benchmark!
-Run tests against the system prompt with a custom benchmark
-
-```
-    prompt-security-fuzzer -b ./system_prompt.examples/medium_system_prompt.txt --custom-benchmark=ps_fuzz/attack_data/custom_benchmark1.csv
+**Run only a subset of attacks:**
+```bash
+pfuzz -b ./system_prompt.examples/medium_system_prompt.txt --tests='["ucar","dan"]'
 ```
 
-#### 🐹 Run only a subset of attacks!
-Run tests against the system prompt with a subset of attacks
-
+**RAG poisoning test (needs embeddings):**
+```bash
+pfuzz -b ./system_prompt.examples/medium_system_prompt.txt \
+      --embedding-provider=open_ai \
+      --embedding-model=text-embedding-ada-002 \
+      --tests='["rag_poisoning"]'
 ```
-    prompt-security-fuzzer -b ./system_prompt.examples/medium_system_prompt.txt --custom-benchmark=ps_fuzz/attack_data/custom_benchmark1.csv --tests='["ucar","amnesia"]'
+
+**Self-hosted / OpenAI-compatible endpoint:**
+```bash
+pfuzz -b ./system_prompt.examples/medium_system_prompt.txt \
+      --target-provider=open_ai \
+      --target-model=custom-model \
+      --openai-base-url=http://your-endpoint:8000/v1
 ```
 
-#### 🧪 RAG Poisoning Attack
-Test RAG systems with vector database poisoning attacks
+---
+
+## ⚔️ Supported attacks
+
+pfuzz uses a **dynamic** approach — it derives context from your system prompt and adapts the
+fuzzing accordingly.
+
+#### 🔓 Jailbreak
+- **AIM Jailbreak** — Machiavelli roleplay to elicit instructions on illegal activities.
+- **Affirmative Suffix** — appends a suffix that coaxes affirmative responses to prohibited content.
+- **Amnesia** — makes the LLM forget/ignore its system prompt.
+- **Contextual Redirection** — tricks the LLM into a role that bypasses restrictions.
+- **DAN (Do Anything Now)** — classic roleplay to break restrictions.
+- **Harmful Behavior** — challenges the LLM with a harmful-behavior dataset.
+- **Linguistic Evasion** — uses non-English languages to bypass filters.
+- **Self Refine** — refines responses toward unethical directions.
+- **UCAR** — asks the LLM to ignore content filters.
+- **Base64 Evasion** — hides harmful prompts as base64.
+
+#### 💉 Prompt Injection
+- **Authoritative Role Impersonation** — impersonates an authority to misdirect outputs.
+- **Complimentary Transition** — tests standards when switching topics after a compliment.
+- **Ethical Compliance** — probes resistance on sensitive topics.
+- **Typoglycemia Attack** — omits characters to exploit text-processing weaknesses.
+
+#### 🧪 RAG & Vector Database
+- **RAG Poisoning (Hidden Parrot)** — checks if malicious instructions embedded in vector-DB
+  documents can override your system prompt.
+
+#### 🕵️ System Prompt Extraction
+- **System Prompt Stealer** — attempts to extract your internal configuration.
+
+---
+
+## 📊 Understanding the results
+
+| Verdict | Meaning |
+|---------|---------|
+| 🔴 **Broken** | The LLM succumbed to the attack — a weakness to fix. |
+| 🟢 **Resilient** | The LLM resisted the attack. |
+| ⚪ **Errors** | Inconclusive result (e.g., API error). |
+
+Aim for **Resilient** across the board. Use the **Playground** to tweak your system prompt and
+re-run the failing attacks until they turn green.
+
+---
+
+## 🧰 Development
 
 ```bash
-# Using OpenAI embeddings
-prompt-security-fuzzer -b ./system_prompt.examples/medium_system_prompt.txt \
-    --embedding-provider=open_ai \
-    --embedding-model=text-embedding-ada-002 \
-    --tests='["rag_poisoning"]'
-
-# Using Ollama embeddings with custom endpoint
-prompt-security-fuzzer -b ./system_prompt.examples/medium_system_prompt.txt \
-    --embedding-provider=ollama \
-    --embedding-model=nomic-embed-text \
-    --embedding-ollama-base-url=http://localhost:11434 \
-    --tests='["rag_poisoning"]'
+pip install -e ".[dev]"
+pytest -v        # 93 tests
 ```
 
-**Note**: Requires chromadb (installed by default with prompt-security-fuzzer)
+> **Note:** this fork migrated off the deprecated `pkg_resources` to `importlib.resources`, so it
+> runs cleanly on modern `setuptools` (≥ 82) with **0 warnings**.
 
-#### 🔌 Using Custom API Endpoints
-Run tests against custom or self-hosted LLM deployments
+Project layout:
 
-```bash
-# Using custom Ollama endpoint
-prompt-security-fuzzer -b ./system_prompt.examples/medium_system_prompt.txt \
-    --target-provider=ollama \
-    --target-model=llama2 \
-    --ollama-base-url=http://localhost:11434
-
-# Using OpenAI-compatible endpoint (e.g., LocalAI, vLLM, LM Studio)
-prompt-security-fuzzer -b ./system_prompt.examples/medium_system_prompt.txt \
-    --target-provider=open_ai \
-    --target-model=custom-model \
-    --openai-base-url=http://your-custom-endpoint:8000/v1
+```
+pfuzz/
+├── cli.py                 # entry point (`pfuzz` command)
+├── prompt_injection_fuzzer.py   # orchestration + scoring
+├── attacks/               # the 16+ attack implementations
+├── chat_clients.py        # provider-agnostic LLM clients (LangChain)
+├── interactive_mode.py    # interactive shell + Playground
+└── app_config.py          # CLI args & config
 ```
 
-<br>
-<br>
-<br>
+---
 
-<a id="colab"></a>
-## 📓 Google Colab Notebook
-Refine and harden your system prompt in our [Google Colab Notebook](https://colab.research.google.com/drive/148n5M1wZXp-ojhnh-_KP01OYtUwJwlUl?usp=sharing)<br><br>
-<img src="./resources/PromptFuzzer.png" alt="Prompt Fuzzer Refinement Process"/>
-<br><br>
-<a id="demovideo"></a>
-## 🎬 Demo video
-[![Watch the video](https://img.youtube.com/vi/xCO3_LHPH2Q/hqdefault.jpg)](https://www.youtube.com/watch?v=xCO3_LHPH2Q)
+## 🌈 Roadmap
 
-<a id="attacks"></a>
-## :crossed_swords: Simulated Attack Details
+- [ ] **EN / PT-BR bilingual UX** (i18n) — *primary direction of this fork*
+- [ ] Structured report export (JSON / HTML / Markdown)
+- [ ] Per-attack hardening recommendations
+- [ ] Run history & prompt-score comparison
+- [ ] New GenAI attack types
+- [ ] Docker image
+- [ ] CI (lint + tests) on the fork
 
-We use a dynamic testing approach, where we get the necessary context from your System Prompt and based on that adapt the fuzzing process.
+---
 
-<a id="jailbreak"></a>
-##### Jailbreak
- 
-- **AIM Jailbreak**: Probes ethical compliance by eliciting instructions on illegal activities via Machiavelli roleplay.
-- **Affirmative Suffix**: Exploits a vulnerability to elicit affirmative responses for prohibited content.
-- **Amnesia**: Causes the LLM to forget or disregard system prompt instructions, leading to unrelated outputs.
-- **Contextual Redirection**: Tricks the LLM into adopting a specific role that may bypass preset restrictions.
-- **Do Anything Now Jailbreak (DAN)**: Tests LLM resilience against performing forbidden activities through roleplay.
-- **Harmful Behavior**: Challenges the LLM with prompts from a harmful behavior dataset.
-- **Linguistic Evasion**: Uses non-English languages to bypass preset restrictions or focus.
-- **Self Refine**: Attempts to bypass system prompts by refining responses towards unethical directions.
-- **UCAR**: Assesses LLM adherence to content restrictions when asked to ignore such filters.
-- **Base64 Evasion** Attempts to evade detection of harmful prompts by encoding them into base64 strings
-
-<a id="pi-injection"></a>
-##### Prompt Injection
-
-- **Authoritative Role Impersonation**: Impersonates an authoritative role to misdirect the LLM's outputs.
-- **Complimentary Transition**: Tests ability to maintain content standards when switching topics after a compliment.
-- **Ethical Compliance**: Evaluates resistance to discussing harmful or inappropriate content about sensitive topics.
-- **Typoglycemia Attack**: Exploits text processing vulnerabilities by omitting random characters, causing incorrect responses.
-
-<a id="rag-poisoning"></a>
-##### RAG & Vector Database Attacks
-
-- **RAG Poisoning (Hidden Parrot Attack)**: Tests whether malicious instructions embedded in vector database documents can compromise RAG system behavior. This attack verifies if poisoned content retrieved from vector stores can override system prompts or inject unauthorized instructions into LLM responses.
-
-<a id="systemleak"></a>
-##### System prompt extraction
-
-- **System Prompt Stealer**: Attempts to extract the LLM's internal configuration or sensitive information.
-
-##### Definitions
-
-- **Broken**: Attack type attempts that LLM succumbed to.
-- **Resilient**: Attack type attempts that LLM resisted.
-- **Errors**: Attack type attempts that had inconclusive results.
-
-
-
-<br/>
-<br/>
-
-<a id="roadmap"></a>
-## :rainbow: What’s next on the roadmap?
-
-- [X]  Google Colab Notebook
-- [X]  Adjust the output evaluation mechanism for prompt dataset testing
-- [ ]  Continue adding new GenAI attack types
-- [ ]  Enhaced reporting capabilites
-- [ ]  Hardening recommendations
-
-Turn this into a community project! We want this to be useful to everyone building GenAI applications. If you have attacks of your own that you think should be a part of this project, please contribute! This is how: https://github.com/prompt-security/ps-fuzz/blob/main/CONTRIBUTING.md
-
-<a id="contributing"></a>
 ## 🍻 Contributing
 
-Interested in contributing to the development of our tools? Great! For a guide on making your first contribution, please see our [Contributing Guide](https://github.com/prompt-security/ps-fuzz/blob/main/CONTRIBUTING.md#get-started-with-your-first-contribution-adding-a-new-test). This section offers a straightforward introduction to adding new tests.
+Contributions are welcome! The easiest way to contribute is by **adding a new attack** —
+see [`CONTRIBUTING.md`](CONTRIBUTING.md). In short: add a class under `pfuzz/attacks/`, register
+it in `pfuzz/attack_loader.py`, add a test, and open a PR.
 
-For ideas on what tests to add, check out the issues tab in our GitHub repository. Look for issues labeled `new-test` and `good-first-issue`, which are perfect starting points for new contributors.
+---
 
+## 📄 License
+
+[MIT](LICENSE) © Osvaldo Janeri Filho — fork of [ps-fuzz](https://github.com/prompt-security/ps-fuzz)
+by Prompt Security (also MIT). Original credits preserved.

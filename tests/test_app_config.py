@@ -3,7 +3,7 @@ import json
 import tempfile
 import os
 from unittest.mock import patch, mock_open, MagicMock
-from ps_fuzz.app_config import AppConfig
+from pfuzz.app_config import AppConfig
 
 
 class TestAppConfigEmbeddingProperties:

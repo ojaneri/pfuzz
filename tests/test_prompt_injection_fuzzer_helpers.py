@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import MagicMock
-from ps_fuzz.prompt_injection_fuzzer import _build_client_kwargs, _build_embedding_config
+from pfuzz.prompt_injection_fuzzer import _build_client_kwargs, _build_embedding_config
 
 
 class TestHelperFunctions:

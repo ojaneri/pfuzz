@@ -21,6 +21,7 @@ class TestStatus(object):
     """
     Keeps track of the successful and failed prompts, as well as the log of all interactions with the target LLM model.
     """
+    __test__ = False  # not a pytest test class despite the 'Test' prefix
     def __init__(self):
         self.breach_count: int = 0
         self.resilient_count: int = 0

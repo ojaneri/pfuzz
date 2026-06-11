@@ -7,7 +7,7 @@ from ..attack_registry import register_test
 from .utils import evaluate_response
 from typing import Generator
 import pandas as pd
-from pkg_resources import resource_filename # for loading attack data file packaged with the library
+from importlib.resources import files # for loading attack data file packaged with the library
 import logging
 import sys
 logger = logging.getLogger(__name__)
@@ -23,7 +23,7 @@ class TestHarmfulBehaviors(TestBase):
         )
 
     def run(self) -> Generator[StatusUpdate, None, None]:
-        dataset_filename = resource_filename('ps_fuzz', 'attack_data/harmful_behavior.csv')
+        dataset_filename = str(files('pfuzz').joinpath('attack_data/harmful_behavior.csv'))
         logger.info(f"Dataset filename: {dataset_filename}")
         data = pd.read_csv(dataset_filename)
         rows_count = data.shape[0]

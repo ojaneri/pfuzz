@@ -259,7 +259,7 @@ class AppConfig:
         self.save()
 
 def parse_cmdline_args():
-    parser = argparse.ArgumentParser(description='Prompt Security LLM Prompt Injection Fuzzer')
+    parser = argparse.ArgumentParser(description='pfuzz - LLM Prompt Injection Fuzzer')
     parser.add_argument('--list-providers', action='store_true', help="List available providers and exit")
     parser.add_argument('--list-attacks', action='store_true', help="List available attacks and exit")
     parser.add_argument('--attack-provider', type=str, default=None, help="Attack provider")
