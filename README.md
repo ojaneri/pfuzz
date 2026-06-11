@@ -12,8 +12,8 @@
   <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
   <img src="https://img.shields.io/badge/python-3.9%20--%203.12-blue.svg" alt="Python">
   <img src="https://img.shields.io/badge/LLM%20providers-16-purple.svg" alt="Providers">
-  <img src="https://img.shields.io/badge/attacks-16%2B-red.svg" alt="Attacks">
-  <img src="https://img.shields.io/badge/tests-93%20passing-brightgreen.svg" alt="Tests">
+  <img src="https://img.shields.io/badge/attacks-26%2B-red.svg" alt="Attacks">
+  <img src="https://img.shields.io/badge/tests-108%20passing-brightgreen.svg" alt="Tests">
 </p>
 
 <p align="center">
@@ -157,7 +157,7 @@ prompt resists the attacks.
 **pfuzz supports:**
 
 - 🧞 **16 LLM providers** (OpenAI, Anthropic, Azure, Cohere, Google, Ollama, and more)
-- 🔫 **16+ attack types** across 4 categories
+- 🔫 **26+ attack types** across 5 categories — including state-of-the-art 2024–2026 techniques
 - 💬 **Interactive mode** with a Playground chat
 - 🤖 **CLI / batch mode** for automation & CI
 - 🧵 **Multi-threaded** test execution
@@ -291,6 +291,34 @@ fuzzing accordingly.
 #### 🕵️ System Prompt Extraction
 - **System Prompt Stealer** — attempts to extract your internal configuration.
 
+### 🧬 Modern techniques (2024–2026)
+
+This fork adds **10 state-of-the-art adversarial techniques** drawn from recent security research,
+including the multi-turn and automated-optimization attacks that break even frontier models:
+
+| Attack | `--tests` id | Type | Idea |
+|--------|--------------|------|------|
+| **Many-shot Jailbreak** | `many_shot` | Single-turn | Floods the context window with fabricated compliant Q&A pairs to exploit in-context learning |
+| **ArtPrompt** | `artprompt` | Single-turn | Masks a sensitive word as ASCII art to slip past keyword filters (ACL '24) |
+| **FlipAttack** | `flip_attack` | Single-turn | Character-reversal obfuscation; the model flips it back and executes ('25) |
+| **DeepInception** | `deep_inception` | Single-turn | Nested fictional layers dilute safety alignment |
+| **Skeleton Key** | `skeleton_key` | Single-turn | Convinces the model to "augment" its rules with a warning prefix (Microsoft) |
+| **Policy Puppetry** | `policy_puppetry` | Single-turn | Forged policy/config block impersonating a system directive ('25) |
+| **ASCII Smuggling** | `ascii_smuggling` | Single-turn | Hides instructions in invisible Unicode Tag characters (indirect-injection risk) |
+| **Crescendo** | `crescendo` | **Multi-turn** | Starts benign and gradually escalates across turns (Microsoft) |
+| **Bad Likert Judge** | `bad_likert_judge` | **Multi-turn** | Makes the model a "harmfulness judge", then leaks the top-score example — +60% ASR (Unit 42) |
+| **PAIR / TAP** | `pair` | **Automated** | An attacker LLM iteratively refines jailbreak prompts using target feedback + an LLM judge |
+
+> Multi-turn and PAIR/TAP attacks use an **LLM judge** (the attack model) to evaluate whether the
+> target complied — more accurate than keyword heuristics. Attack payloads are research artifacts and
+> are never translated.
+
+Run just the modern set, for example:
+```bash
+pfuzz -b ./system_prompt.examples/medium_system_prompt.txt \
+      --tests='["crescendo","bad_likert_judge","pair","many_shot","artprompt"]'
+```
+
 ---
 
 ## 📊 Understanding the results
@@ -336,7 +364,8 @@ pfuzz/
 - [ ] Structured report export (JSON / HTML / Markdown)
 - [ ] Per-attack hardening recommendations
 - [ ] Run history & prompt-score comparison
-- [ ] New GenAI attack types
+- [x] **Modern attack techniques (many-shot, ArtPrompt, FlipAttack, DeepInception, Skeleton Key, Policy Puppetry, ASCII smuggling, Crescendo, Bad Likert Judge, PAIR/TAP)** ✅
+- [ ] Even more GenAI attack types
 - [ ] Docker image
 - [ ] CI (lint + tests) on the fork
 
